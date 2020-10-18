@@ -1,0 +1,30 @@
+
+# Telegram Bot Token (default "")
+# equivalent environment variable MBOT_TEL_TOKEN string
+tel_token: <required>
+
+# Telegram user IDs of motion-bot Admins (default "")
+# equivalent environment variable MBOT_TEL_ADMIN_ID slice
+tel_admin_id: 
+  - <required>
+
+# Default chats subscribed to this bot (default "")
+# equivalent environment variable MBOT_TEL_SUBSCRIBED_CHATS_ID slice
+tel_subscribed_chats_id: 
+  - <recommended>
+
+# Port where prometheus metrics are exposed with /metrics (default "9802")
+# equivalent environment variable MBOT_METRICS_PORT string
+metrics_port: 9802
+
+# Port where motion-bot listens for motion events (default "8000")
+# equivalent environment variable MBOT_WATCHER_PORT string
+watcher_port: 8000
+
+# Motion Control URL (default "http://motion:8080")
+# equivalent environment variable MBOT_MOTION_CONTROL_URL string
+motion_control_port: "http://motion:8080"
+
+# Log verbose
+# equivalent environment variable MBOT_VERBOSE bool
+verbose: false

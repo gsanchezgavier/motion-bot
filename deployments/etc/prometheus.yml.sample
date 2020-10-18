@@ -1,0 +1,14 @@
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 15s
+
+    static_configs:
+      - targets: ['http://telebot:9802/metrics']
+
+# NewRelic->Add Data->Prometheus->Generate Remote Writing config
+remote_write:
+- url: <remote write>
+  bearer_token: <token>

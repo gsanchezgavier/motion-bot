@@ -1,0 +1,27 @@
+version: '3.6'
+
+services:
+  telebot:
+    image: guillesg/motion-bot:latest
+    volumes:
+      - ./data/:/var/lib/motion
+      - ./etc/config.yml:/etc/telebot/config.yml
+    restart: unless-stopped
+
+  motion:
+    image: easypi/motion-arm:latest
+    depends_on:
+      - "telebot"
+    volumes:
+      - ./etc/motion.conf:/etc/motion/motion.conf
+      - ./data:/var/lib/motion
+      - /etc/localtime:/etc/localtime
+    devices:
+      - /dev/video0:/dev/video0
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./etc/prometheus.yml:/etc/prometheus/prometheus.yml
+
