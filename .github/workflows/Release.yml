@@ -1,0 +1,52 @@
+name: Docker Push
+
+on:
+  push:
+    branches: [ main ]
+  release:
+    types:
+      - published
+
+jobs:
+  pushToDockerHub:
+    runs-on: ubuntu-latest
+    env:
+      # This tag is changed if release event triggered the pipeline
+      DOCKER_IMAGE_TAG: main
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: ^1.15
+      
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Compile
+        run: make
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Use version tag for release
+        if: github.event.release.tag_name != ''
+        run: echo "DOCKER_IMAGE_TAG=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+
+      - name: Build and push image
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+          push: true
+          tags: guillesg/motion-bot:${{ env.DOCKER_IMAGE_TAG }}
+
+
